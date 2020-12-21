@@ -1,16 +1,20 @@
+---
+
 - name: "Test Netbox IP address module"
   connection: local
   hosts: localhost
   gather_facts: False
    
-    tasks:
-      - name: Get a new available IP inside 10.1.101.0/24
-        netbox_ip_address:
-          netbox_url: http://18.224.30.147
-          netbox_token: 2f85d425c2bcedf299641c2710ddd02b25356782
-          data:
-            prefix: 10.1.101.0/24
-          state: new
-        register: newIP
-      - debug:
-          msg: "{{ newIP }}"
+  tasks:
+    - name: Get a new available IP inside 10.1.101.0/24
+      netbox.netbox.netbox_ip_address:
+        netbox_url: https://netbox.mysidlabs.com
+        netbox_token: 2f85d425c2bcedf299641c2710ddd02b25356782
+        data:
+          prefix: 10.1.101.0/24
+        state: new
+        validate_certs: false
+      register: newIP
+    - debug:
+        msg: "{{ newIP.ip_address.address }}"
+...
